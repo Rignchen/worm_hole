@@ -1,3 +1,6 @@
+use clap::Parser;
+use worm_hole::cli::Args;
+
 fn main() {
-    println!("Hello, world!");
+    let args = Args::parse();
 }
