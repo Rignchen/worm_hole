@@ -2,6 +2,7 @@ structstruck::strike! {
     /// List of errors that the program can return.
     #[strikethrough[derive(Debug)]]
     pub enum WHError {
+        DatabaseConnectionError(String),
     }
 }
 
@@ -14,10 +15,11 @@ pub fn unwrap_worm_hole_error<T>(result: WHResult<T>) -> T {
             eprintln!(
                 "{}",
                 match error {
+                    WHError::DatabaseConnectionError(path) =>
+                        format!("Error connecting to database at {}", path),
                 }
             );
             std::process::exit(1);
         }
     }
 }
-

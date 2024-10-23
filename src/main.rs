@@ -1,10 +1,7 @@
 use clap::Parser;
 use worm_hole::{
     cli::Args,
-    error::{
-        WHResult, 
-        unwrap_worm_hole_error
-    },
+    error::{unwrap_worm_hole_error, WHResult},
 };
 
 fn main() {
