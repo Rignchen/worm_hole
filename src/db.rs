@@ -39,8 +39,10 @@ impl Database {
         statement
             .bind::<&[(&str, &str)]>(&[(":alias", alias), (":path", path)])
             .unwrap();
-        statement.next().unwrap();
-        Ok(())
+        match statement.next() {
+            Ok(_) => Ok(()),
+            Err(_) => Err(WHError::AliasAlreadyExists(alias.to_string())),
+        }
     }
 
     pub fn edit_alias(&self, alias: &str, paths: &str) -> WHResult<()> {
