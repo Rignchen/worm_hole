@@ -55,6 +55,9 @@ structstruck::strike! {
                     pub path: String,
                 }
             ),
-        }
+        },
+        /// The path to the sqlite database file
+        #[clap(long, default_value = "~/.wormhole.db")]
+        pub db_path: String,
     }
 }

@@ -2,6 +2,7 @@ use clap::Parser;
 use worm_hole::{
     cli::Args,
     error::{unwrap_worm_hole_error, WHResult},
+    db::Database,
 };
 
 fn main() {
@@ -10,6 +11,7 @@ fn main() {
 
 fn run() -> WHResult<()> {
     let args = Args::parse();
-    println!("{:?}", args);
+    let database = Database::new(args.db_path.as_str())?;
+
     Ok(())
 }
