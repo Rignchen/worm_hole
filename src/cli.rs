@@ -57,6 +57,7 @@ structstruck::strike! {
         },
         // We use a PathBuf here because we here instead of a Path because we don't need to
         // canonicalize and don't want to fail if the path doesn't exist
+        // Also Path cannot hold a file path, only a directory path
         /// The path to the sqlite database file
         #[clap(long, default_value = "~/.wormhole.db")]
         pub db_path: PathBuf,
@@ -68,7 +69,10 @@ pub struct Path(String);
 impl FromStr for Path {
     type Err = String;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let path = canonicalize(s).map_err(|e| e.to_string())?;
+        let path = canonicalize(s).map_err(|_| "Path does not exist")?;
+        if !path.is_dir() {
+            return Err(format!("{} is not a directory", s));
+        }
         Ok(Self(path.to_string_lossy().to_string()))
     }
 }
