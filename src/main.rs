@@ -6,6 +6,7 @@ use worm_hole::{
         AddAlias,
         RemoveAlias,
         ListAliases,
+        EditAlias,
         Query,
     },
     error::{unwrap_worm_hole_error, WHResult},
@@ -37,8 +38,8 @@ fn run() -> WHResult<()> {
             let path = database.get_alias(alias.as_str())?;
             println!("cd {}", path);
         }
-        _ => {
-            eprintln!("Command not implemented");
+        Command::EditAlias(EditAlias { alias, path }) => {
+            database.edit_alias(alias.as_str(), path.str())?;
         }
     }
 

@@ -43,6 +43,17 @@ impl Database {
         Ok(())
     }
 
+    pub fn edit_alias(&self, alias: &str, paths: &str) -> WHResult<()> {
+        let mut statement = self.connection
+            .prepare("update aliases set path = :path where alias = :alias")
+            .unwrap();
+        statement
+            .bind::<&[(&str, &str)]>(&[(":alias", alias), (":path", paths)])
+            .unwrap();
+        statement.next().unwrap();
+        Ok(())
+    }
+
     pub fn remove_alias(&self, alias: &str) -> WHResult<()> {
         let mut statement = self.connection
             .prepare("delete from aliases where alias = :alias")
