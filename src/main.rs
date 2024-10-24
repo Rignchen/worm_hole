@@ -11,7 +11,8 @@ fn main() {
 
 fn run() -> WHResult<()> {
     let args = Args::parse();
-    let database = Database::new(args.db_path.as_str())?;
+    let database = Database::new(args.db_path.to_str().unwrap())?;
+    println!("{:?}", args);
 
     Ok(())
 }

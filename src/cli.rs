@@ -1,4 +1,7 @@
 use clap::Parser;
+use std::path::PathBuf;
+use std::fs::canonicalize;
+use std::str::FromStr;
 
 structstruck::strike! {
     /// Worm hole is a simple CLI tool to easily navigate between directories.
@@ -27,7 +30,7 @@ structstruck::strike! {
             AddAlias(
                 struct AddAlias {
                     /// The real path to the location
-                    pub path: String,
+                    pub path: Path,
                     /// The alias to use to go to the location
                     pub alias: String,
                 }
@@ -52,12 +55,30 @@ structstruck::strike! {
                     /// The alias to edit
                     pub alias: String,
                     /// The new path to the location
-                    pub path: String,
+                    pub path: Path,
                 }
             ),
         },
+        // We use a PathBuf here because we here instead of a Path because we don't need to
+        // canonicalize and don't want to fail if the path doesn't exist
         /// The path to the sqlite database file
         #[clap(long, default_value = "~/.wormhole.db")]
-        pub db_path: String,
+        pub db_path: PathBuf,
     }
 }
+
+#[derive(Debug, Clone)]
+pub struct Path(String);
+impl FromStr for Path {
+    type Err = String;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        let path = canonicalize(s).map_err(|e| e.to_string())?;
+        Ok(Self(path.to_string_lossy().to_string()))
+    }
+}
+impl Path {
+    pub fn str(&self) -> &str {
+        &self.0
+    }
+}
+
