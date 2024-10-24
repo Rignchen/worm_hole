@@ -46,6 +46,7 @@ impl Database {
     }
 
     pub fn edit_alias(&self, alias: &str, paths: &str) -> WHResult<()> {
+        self.get_alias(alias)?; // Check if alias exists
         let mut statement = self.connection
             .prepare("update aliases set path = :path where alias = :alias")
             .unwrap();
