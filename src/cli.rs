@@ -25,10 +25,10 @@ structstruck::strike! {
             #[clap(name = "add")]
             AddAlias(
                 struct AddAlias {
-                    /// The real path to the location
-                    pub path: Path,
                     /// The alias to use to go to the location
                     pub alias: String,
+                    /// The real path to the location
+                    pub path: Path,
                 }
             ),
             /// Remove a location alias from the list
