@@ -1,6 +1,10 @@
 use clap::Parser;
 use worm_hole::{
-    cli::Args,
+    cli::{
+        Args,
+        Command,
+        AddAlias,
+    },
     error::{unwrap_worm_hole_error, WHResult},
     db::Database,
 };
@@ -12,7 +16,15 @@ fn main() {
 fn run() -> WHResult<()> {
     let args = Args::parse();
     let database = Database::new(args.db_path.to_str().unwrap())?;
-    println!("{:?}", args);
+
+    match args.cmd {
+        Command::AddAlias(AddAlias { alias, path }) => {
+            database.add_alias(alias.as_str(), path.str())?;
+        }
+        _ => {
+            eprintln!("Command not implemented");
+        }
+    }
 
     Ok(())
 }

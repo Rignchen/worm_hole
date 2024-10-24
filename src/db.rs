@@ -30,4 +30,15 @@ impl Database {
             )
             .unwrap();
     }
+
+    pub fn add_alias(&self, alias: &str, path: &str) -> WHResult<()> {
+        let mut statement = self.connection
+            .prepare("insert into aliases (alias, path) values (:alias, :path)")
+            .unwrap();
+        statement
+            .bind::<&[(&str, &str)]>(&[(":alias", alias), (":path", path)])
+            .unwrap();
+        statement.next().unwrap();
+        Ok(())
+    }
 }
