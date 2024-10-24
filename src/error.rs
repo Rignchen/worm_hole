@@ -3,6 +3,7 @@ structstruck::strike! {
     #[strikethrough[derive(Debug)]]
     pub enum WHError {
         DatabaseConnectionError(String),
+        AliasNotFound(String),
     }
 }
 
@@ -17,6 +18,7 @@ pub fn unwrap_worm_hole_error<T>(result: WHResult<T>) -> T {
                 match error {
                     WHError::DatabaseConnectionError(path) =>
                         format!("Error connecting to database at {}", path),
+                    WHError::AliasNotFound(alias) => format!("Alias {} does not exist", alias),
                 }
             );
             std::process::exit(1);

@@ -82,7 +82,10 @@ impl Database {
             .prepare("select path from aliases where alias = :alias")
             .unwrap();
         statement.bind::<(&str, &str)>((":alias", alias)).unwrap();
-        statement.next().unwrap();
-        Ok(statement.read::<String, _>("path").unwrap())
+        if let Ok(State::Row) = statement.next() {
+            Ok(statement.read::<String, _>("path").unwrap())
+        } else {
+            Err(WHError::AliasNotFound(alias.to_string()))
+        }
     }
 }
