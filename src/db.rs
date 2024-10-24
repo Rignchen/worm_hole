@@ -1,5 +1,6 @@
 use crate::error::{WHError, WHResult};
 use sqlite::Connection;
+use sqlite::State;
 
 pub struct Database {
     connection: Connection,
@@ -40,5 +41,19 @@ impl Database {
             .unwrap();
         statement.next().unwrap();
         Ok(())
+    }
+
+    pub fn get_all_aliases(&self) -> WHResult<Vec<(String, String)>> {
+        let mut statement = self.connection
+            .prepare("select alias, path from aliases")
+            .unwrap();
+        let mut aliases = Vec::new();
+        while let Ok(State::Row) = statement.next() {
+            aliases.push((
+                    statement.read::<String, _>("alias").unwrap(),
+                    statement.read::<String, _>("path").unwrap(),
+            ));
+        }
+        Ok(aliases)
     }
 }

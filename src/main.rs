@@ -4,6 +4,7 @@ use worm_hole::{
         Args,
         Command,
         AddAlias,
+        ListAliases,
     },
     error::{unwrap_worm_hole_error, WHResult},
     db::Database,
@@ -20,6 +21,12 @@ fn run() -> WHResult<()> {
     match args.cmd {
         Command::AddAlias(AddAlias { alias, path }) => {
             database.add_alias(alias.as_str(), path.str())?;
+        }
+        Command::ListAliases(ListAliases {}) => {
+            let aliases = database.get_all_aliases()?;
+            for alias in aliases {
+                println!("{} -> {}", alias.0, alias.1);
+            }
         }
         _ => {
             eprintln!("Command not implemented");
