@@ -9,7 +9,7 @@ use worm_hole::{
         EditAlias,
         Query,
     },
-    error::{unwrap_worm_hole_error, WHResult},
+    error::{unwrap_worm_hole_error, WHResult, WHError},
     db::Database,
 };
 
@@ -35,7 +35,10 @@ fn run() -> WHResult<()> {
             }
         }
         Command::Query(Query { alias }) => {
-            let path = database.get_alias(alias.as_str())?;
+            let path: String = database.get_alias(alias.as_str())?;
+            if !std::path::Path::new(&path).exists() {
+                return Err(WHError::PathOfAliasNotExist(alias, path));
+            }
             println!("cd {}", path);
         }
         Command::EditAlias(EditAlias { alias, path }) => {
