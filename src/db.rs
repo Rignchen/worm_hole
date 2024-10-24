@@ -43,6 +43,15 @@ impl Database {
         Ok(())
     }
 
+    pub fn remove_alias(&self, alias: &str) -> WHResult<()> {
+        let mut statement = self.connection
+            .prepare("delete from aliases where alias = :alias")
+            .unwrap();
+        statement.bind::<(&str, &str)>((":alias", alias)).unwrap();
+        statement.next().unwrap();
+        Ok(())
+    }
+
     pub fn get_all_aliases(&self) -> WHResult<Vec<(String, String)>> {
         let mut statement = self.connection
             .prepare("select alias, path from aliases")

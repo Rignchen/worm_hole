@@ -4,6 +4,7 @@ use worm_hole::{
         Args,
         Command,
         AddAlias,
+        RemoveAlias,
         ListAliases,
         Query,
     },
@@ -22,6 +23,9 @@ fn run() -> WHResult<()> {
     match args.cmd {
         Command::AddAlias(AddAlias { alias, path }) => {
             database.add_alias(alias.as_str(), path.str())?;
+        }
+        Command::RemoveAlias(RemoveAlias { alias }) => {
+            database.remove_alias(alias.as_str())?;
         }
         Command::ListAliases(ListAliases {}) => {
             let aliases = database.get_all_aliases()?;
