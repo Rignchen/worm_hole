@@ -5,6 +5,7 @@ use worm_hole::{
         Command,
         AddAlias,
         ListAliases,
+        Query,
     },
     error::{unwrap_worm_hole_error, WHResult},
     db::Database,
@@ -27,6 +28,10 @@ fn run() -> WHResult<()> {
             for alias in aliases {
                 println!("{} -> {}", alias.0, alias.1);
             }
+        }
+        Command::Query(Query { alias }) => {
+            let path = database.get_alias(alias.as_str())?;
+            println!("cd {}", path);
         }
         _ => {
             eprintln!("Command not implemented");

@@ -56,4 +56,13 @@ impl Database {
         }
         Ok(aliases)
     }
+
+    pub fn get_alias(&self, alias: &str) -> WHResult<String> {
+        let mut statement = self.connection
+            .prepare("select path from aliases where alias = :alias")
+            .unwrap();
+        statement.bind::<(&str, &str)>((":alias", alias)).unwrap();
+        statement.next().unwrap();
+        Ok(statement.read::<String, _>("path").unwrap())
+    }
 }

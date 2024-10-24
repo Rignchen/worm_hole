@@ -15,14 +15,10 @@ structstruck::strike! {
         #[clap(subcommand)]
         pub cmd: pub enum Command {
             /// Move to the given location alias
-            #[clap(name = "cd")]
-            ChangeDir(
+            Query(
                 /// The alias of the location to move to
-                struct ChangeDir {
+                struct Query {
                     pub alias: String,
-                    /// Display the location path instead of changing directory
-                    #[clap(short, long)]
-                    pub query: bool,
                 }
             ),
             /// Add a location alias to the list
