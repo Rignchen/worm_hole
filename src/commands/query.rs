@@ -1,13 +1,13 @@
-use clap::Parser;
 use crate::{
     db::Database,
     error::{WHError, WHResult},
 };
+use clap::Parser;
 
 #[derive(Parser, Debug)]
 pub struct Query {
     /// The alias of the location to move to
-	pub alias: String,
+    pub alias: String,
 }
 
 impl Query {

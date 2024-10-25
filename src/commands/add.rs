@@ -1,16 +1,12 @@
+use crate::{db::Database, error::WHResult, path::Path};
 use clap::Parser;
-use crate::{
-    path::Path,
-    db::Database,
-    error::WHResult,
-};
 
 #[derive(Parser, Debug)]
 pub struct AddAlias {
-	/// The alias to use to go to the location
-	pub alias: String,
-	/// The real path to the location
-	pub path: Path,
+    /// The alias to use to go to the location
+    pub alias: String,
+    /// The real path to the location
+    pub path: Path,
 }
 
 impl AddAlias {

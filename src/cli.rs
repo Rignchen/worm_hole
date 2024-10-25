@@ -1,5 +1,5 @@
-use clap::Parser;
 use crate::commands;
+use clap::Parser;
 
 structstruck::strike! {
     /// Worm hole is a simple CLI tool to easily navigate between directories.
@@ -34,4 +34,3 @@ structstruck::strike! {
         pub db_path: String,
     }
 }
-

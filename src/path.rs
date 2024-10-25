@@ -18,4 +18,3 @@ impl Path {
         &self.0
     }
 }
-

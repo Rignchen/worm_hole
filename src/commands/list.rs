@@ -1,8 +1,5 @@
+use crate::{db::Database, error::WHResult};
 use clap::Parser;
-use crate::{
-    db::Database,
-    error::WHResult,
-};
 
 #[derive(Parser, Debug)]
 pub struct ListAliases {}

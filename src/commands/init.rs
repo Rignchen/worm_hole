@@ -1,11 +1,9 @@
+use crate::{db::Database, error::WHResult};
 use clap::Parser;
-use crate::{
-    db::Database,
-    error::WHResult,
-};
 
 #[derive(Parser, Debug)]
 pub struct Init {
+    /// The shell to generate the init code for
     shell: Shell,
 }
 impl Init {
@@ -25,7 +23,8 @@ enum Shell {
 impl Shell {
     pub fn get_init_code(&self) -> &'static str {
         match self {
-            Shell::Bash | Shell::Zsh => "alias 'wh=worm_hole'
+            Shell::Bash | Shell::Zsh => {
+                "alias 'wh=worm_hole'
                 __worm_hole_cd() {
                     if [ -z \"$1\" ]
                     then
@@ -34,8 +33,10 @@ impl Shell {
                         CD=$(wh query $1) && \\builtin cd $CD
                     fi
                 }
-                alias 'whcd=__worm_hole_cd'",
-            Shell::Fish => "alias 'wh=worm_hole'
+                alias 'whcd=__worm_hole_cd'"
+            }
+            Shell::Fish => {
+                "alias 'wh=worm_hole'
                 function __worm_hole_cd
                     if test -z $argv
                         cd $HOME
@@ -46,7 +47,8 @@ impl Shell {
                         end
                     end
                 end
-                alias 'whcd=__worm_hole_cd'",
+                alias 'whcd=__worm_hole_cd'"
+            }
         }
     }
 }
