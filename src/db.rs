@@ -11,9 +11,7 @@ impl Database {
         let connection = Connection::open(path);
         match connection {
             Ok(connection) => {
-                let db = Database { connection };
-                db.init();
-                Ok(db)
+                Ok( Database { connection } )
             }
             Err(_) => Err(WHError::DatabaseConnectionError(path.to_string())),
         }

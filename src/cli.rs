@@ -53,6 +53,10 @@ structstruck::strike! {
                     pub path: Path,
                 }
             ),
+            /// Initialize the database and the bash config to make wormhole work
+            Init(
+                struct Init {}
+            ),
         },
         // We use a String here because we here instead of a Path because we don't need to
         // canonicalize and don't want to fail if the path doesn't exist

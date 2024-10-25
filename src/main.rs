@@ -35,6 +35,20 @@ fn run() -> WHResult<()> {
         }
         Command::EditAlias(EditAlias { alias, path }) => {
             database.edit_alias(alias.as_str(), path.str())?;
+        Command::Init(init) => {
+            database.init();
+            let bash_init_code =
+                "alias 'wh=worm_hole'
+                __worm_hole_cd() {
+                    if [ -z \"$1\" ]
+                    then
+                        cd $HOME
+                    else
+                        CD=$(wh query $1) && \\builtin cd $CD
+                    fi
+                }
+                alias 'whcd=__worm_hole_cd'";
+            println!("{}", bash_init_code);
         }
     }
 
