@@ -1,8 +1,8 @@
 use clap::Parser;
 use worm_hole::{
-    cli::{AddAlias, Args, Command, EditAlias, ListAliases, Query, RemoveAlias},
+    cli::{Args, Command},
     db::Database,
-    error::{unwrap_worm_hole_error, WHError, WHResult},
+    error::{unwrap_worm_hole_error, WHResult},
 };
 
 fn main() {
@@ -14,41 +14,23 @@ fn run() -> WHResult<()> {
     let database = Database::new(args.db_path.as_str())?;
 
     match args.cmd {
-        Command::AddAlias(AddAlias { alias, path }) => {
-            database.add_alias(alias.as_str(), path.str())?;
+        Command::AddAlias(add) => {
+            add.run(&database)?;
         }
-        Command::RemoveAlias(RemoveAlias { alias }) => {
-            database.remove_alias(alias.as_str())?;
+        Command::RemoveAlias(remove) => {
+            remove.run(&database)?;
         }
-        Command::ListAliases(ListAliases {}) => {
-            let aliases = database.get_all_aliases()?;
-            for alias in aliases {
-                println!("{} -> {}", alias.0, alias.1);
-            }
+        Command::ListAliases(list) => {
+            list.run(&database)?;
         }
-        Command::Query(Query { alias }) => {
-            let path: String = database.get_alias(alias.as_str())?;
-            if !std::path::Path::new(&path).exists() {
-                return Err(WHError::PathOfAliasNotExist(alias, path));
-            }
-            println!("cd {}", path);
+        Command::Query(query) => {
+            query.run(&database)?;
         }
-        Command::EditAlias(EditAlias { alias, path }) => {
-            database.edit_alias(alias.as_str(), path.str())?;
+        Command::EditAlias(edit) => {
+            edit.run(&database)?;
+        }
         Command::Init(init) => {
-            database.init();
-            let bash_init_code =
-                "alias 'wh=worm_hole'
-                __worm_hole_cd() {
-                    if [ -z \"$1\" ]
-                    then
-                        cd $HOME
-                    else
-                        CD=$(wh query $1) && \\builtin cd $CD
-                    fi
-                }
-                alias 'whcd=__worm_hole_cd'";
-            println!("{}", bash_init_code);
+            init.run(&database)?;
         }
     }
 

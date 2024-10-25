@@ -1,6 +1,5 @@
 use clap::Parser;
-use std::fs::canonicalize;
-use std::str::FromStr;
+use crate::commands;
 
 structstruck::strike! {
     /// Worm hole is a simple CLI tool to easily navigate between directories.
@@ -14,73 +13,25 @@ structstruck::strike! {
         #[clap(subcommand)]
         pub cmd: pub enum Command {
             /// Move to the given location alias
-            Query(
-                /// The alias of the location to move to
-                struct Query {
-                    pub alias: String,
-                }
-            ),
+            Query(commands::Query),
             /// Add a location alias to the list
             #[clap(name = "add")]
-            AddAlias(
-                struct AddAlias {
-                    /// The alias to use to go to the location
-                    pub alias: String,
-                    /// The real path to the location
-                    pub path: Path,
-                }
-            ),
+            AddAlias(commands::AddAlias),
             /// Remove a location alias from the list
             #[clap(name = "rm")]
-            RemoveAlias(
-                struct RemoveAlias {
-                    /// The alias to remove
-                    pub alias: String,
-                }
-            ),
+            RemoveAlias(commands::RemoveAlias),
             /// List all location aliases
             #[clap(name = "ls")]
-            ListAliases(
-                struct ListAliases {}
-            ),
+            ListAliases(commands::ListAliases),
             /// Edit the location of an alias
             #[clap(name = "edit")]
-            EditAlias(
-                struct EditAlias {
-                    /// The alias to edit
-                    pub alias: String,
-                    /// The new path to the location
-                    pub path: Path,
-                }
-            ),
+            EditAlias(commands::EditAlias),
             /// Initialize the database and the bash config to make wormhole work
-            Init(
-                struct Init {}
-            ),
+            Init(commands::Init),
         },
-        // We use a String here because we here instead of a Path because we don't need to
-        // canonicalize and don't want to fail if the path doesn't exist
-        // Also Path cannot hold a file path, only a directory path
         /// The path to the sqlite database file
         #[clap(long, default_value_t = format!("{}/.wormhole.db", std::env::var("HOME").unwrap()))]
         pub db_path: String,
     }
 }
 
-#[derive(Debug, Clone)]
-pub struct Path(String);
-impl FromStr for Path {
-    type Err = String;
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let path = canonicalize(s).map_err(|_| "Path does not exist")?;
-        if !path.is_dir() {
-            return Err(format!("{} is not a directory", s));
-        }
-        Ok(Self(path.to_string_lossy().to_string()))
-    }
-}
-impl Path {
-    pub fn str(&self) -> &str {
-        &self.0
-    }
-}
