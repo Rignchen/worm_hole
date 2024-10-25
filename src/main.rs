@@ -1,16 +1,8 @@
 use clap::Parser;
 use worm_hole::{
-    cli::{
-        Args,
-        Command,
-        AddAlias,
-        RemoveAlias,
-        ListAliases,
-        EditAlias,
-        Query,
-    },
-    error::{unwrap_worm_hole_error, WHResult, WHError},
+    cli::{AddAlias, Args, Command, EditAlias, ListAliases, Query, RemoveAlias},
     db::Database,
+    error::{unwrap_worm_hole_error, WHError, WHResult},
 };
 
 fn main() {

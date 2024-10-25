@@ -1,6 +1,6 @@
 use clap::Parser;
-use std::path::PathBuf;
 use std::fs::canonicalize;
+use std::path::PathBuf;
 use std::str::FromStr;
 
 structstruck::strike! {
@@ -81,4 +81,3 @@ impl Path {
         &self.0
     }
 }
-
