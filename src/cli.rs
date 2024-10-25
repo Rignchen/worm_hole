@@ -1,6 +1,5 @@
 use clap::Parser;
 use std::fs::canonicalize;
-use std::path::PathBuf;
 use std::str::FromStr;
 
 structstruck::strike! {
@@ -55,12 +54,12 @@ structstruck::strike! {
                 }
             ),
         },
-        // We use a PathBuf here because we here instead of a Path because we don't need to
+        // We use a String here because we here instead of a Path because we don't need to
         // canonicalize and don't want to fail if the path doesn't exist
         // Also Path cannot hold a file path, only a directory path
         /// The path to the sqlite database file
-        #[clap(long, default_value = "~/.wormhole.db")]
-        pub db_path: PathBuf,
+        #[clap(long, default_value_t = format!("{}/.wormhole.db", std::env::var("HOME").unwrap()))]
+        pub db_path: String,
     }
 }
 
