@@ -76,7 +76,7 @@ impl Shell {
                     then
                         cd $HOME
                     else
-                        CD=$(wh query $1) && \\builtin cd $CD
+                        CD=$(worm_hole query $1) && \\builtin cd $CD
                     fi
                 }
                 "
@@ -86,7 +86,7 @@ impl Shell {
                     if test -z $argv
                         cd $HOME
                     else
-                        set -l CD (wh query $argv)
+                        set -l CD (worm_hole query $argv)
                         if test -n $CD
                             builtin cd $CD
                         end
