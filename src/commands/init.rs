@@ -20,11 +20,12 @@ impl Init {
 enum Shell {
     Bash,
     Fish,
+    Zsh,
 }
 impl Shell {
     pub fn get_init_code(&self) -> &'static str {
         match self {
-            Shell::Bash => "alias 'wh=worm_hole'
+            Shell::Bash | Shell::Zsh => "alias 'wh=worm_hole'
                 __worm_hole_cd() {
                     if [ -z \"$1\" ]
                     then
