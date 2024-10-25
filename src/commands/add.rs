@@ -6,6 +6,7 @@ pub struct AddAlias {
     /// The alias to use to go to the location
     pub alias: String,
     /// The real path to the location
+    #[clap(default_value = ".")]
     pub path: Path,
 }
 
