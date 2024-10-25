@@ -30,7 +30,7 @@ fn run() -> WHResult<()> {
             edit.run(&database)?;
         }
         Command::Init(init) => {
-            init.run(&database)?;
+            init.run(&database, args.db_path.as_str())?;
         }
     }
 

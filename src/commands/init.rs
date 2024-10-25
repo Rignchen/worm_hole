@@ -31,9 +31,9 @@ pub struct Init {
     edit: Option<String>,
 }
 impl Init {
-    pub fn run(&self, database: &Database) -> WHResult<()> {
+    pub fn run(&self, database: &Database, db_path: &str) -> WHResult<()> {
         database.init();
-        println!("{}", self.shell.get_init_code(&self));
+        println!("{}", self.shell.get_init_code(&self, db_path));
         Ok(())
     }
 }
@@ -45,54 +45,55 @@ enum Shell {
     Zsh,
 }
 impl Shell {
-    pub fn get_init_code(&self, aliases: &Init) -> String {
+    pub fn get_init_code(&self, aliases: &Init, db_path: &str) -> String {
         let mut builder = StringBuilder::default();
-        builder.append(format!("alias {}=worm_hole\n", aliases.worm_hole));
-        builder.append(self.get_cd_function());
+        builder.append(format!("alias {}=worm_hole --db-path {}\n", aliases.worm_hole, db_path));
+        builder.append(self.get_cd_function(aliases.worm_hole.as_str()));
         builder.append(format!("alias {}=__worm_hole_cd\n", aliases.cd));
         if let Some(add) = &aliases.add {
-            builder.append(format!("alias {}='worm_hole add'\n", add));
+            builder.append(format!("alias {}='{} add'\n", add, aliases.worm_hole));
         }
         if let Some(remove) = &aliases.remove {
-            builder.append(format!("alias {}='worm_hole remove'\n", remove));
+            builder.append(format!("alias {}='{} remove'\n", remove, aliases.worm_hole));
         }
         if let Some(list) = &aliases.list {
-            builder.append(format!("alias {}='worm_hole list'\n", list));
+            builder.append(format!("alias {}='{} list'\n", list, aliases.worm_hole));
         }
         if let Some(query) = &aliases.query {
-            builder.append(format!("alias {}='worm_hole query'\n", query));
+            builder.append(format!("alias {}='{} query'\n", query, aliases.worm_hole));
         }
         if let Some(edit) = &aliases.edit {
-            builder.append(format!("alias {}='worm_hole edit'\n", edit));
+            builder.append(format!("alias {}='{} edit'\n", edit, aliases.worm_hole));
         }
         builder.string().unwrap()
     }
 
-    fn get_cd_function(&self) -> &'static str {
+    fn get_cd_function(&self, worm_hole_command: &str) -> String {
+        let mut builder = StringBuilder::default();
         match self {
             Shell::Bash | Shell::Zsh => {
-                "__worm_hole_cd() {
-                    if [ -z \"$1\" ]
-                    then
-                        cd $HOME
-                    else
-                        CD=$(worm_hole query $1) && \\builtin cd $CD
-                    fi
-                }
-                "
+                builder.append("__worm_hole_cd() {\n");
+                builder.append("    if [ -z \"$1\" ]\n");
+                builder.append("    then\n");
+                builder.append("        cd $HOME\n");
+                builder.append("    else\n");
+                builder.append(format!("        CD=$({} query $1) && \\builtin cd $CD\n", worm_hole_command));
+                builder.append("    fi\n");
+                builder.append("}\n");
+                builder.string().unwrap()
             }
             Shell::Fish => {
-                "function __worm_hole_cd
-                    if test -z $argv
-                        cd $HOME
-                    else
-                        set -l CD (worm_hole query $argv)
-                        if test -n $CD
-                            builtin cd $CD
-                        end
-                    end
-                end
-                "
+                builder.append("function __worm_hole_cd\n");
+                builder.append("    if test -z $argv\n");
+                builder.append("        cd $HOME\n");
+                builder.append("    else\n");
+                builder.append(format!("        set -l CD ({} query $argv)\n", worm_hole_command));
+                builder.append("        if test -n $CD\n");
+                builder.append("            builtin cd $CD\n");
+                builder.append("        end\n");
+                builder.append("    end\n");
+                builder.append("end\n");
+                builder.string().unwrap()
             }
         }
     }
