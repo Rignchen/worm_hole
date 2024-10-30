@@ -1,6 +1,11 @@
-use crate::error::{WHError, WHResult};
-use sqlite::Connection;
-use sqlite::State;
+use crate::{
+    error::{WHError, WHResult},
+    alias::AliasList,
+};
+use sqlite::{
+    Connection,
+    State,
+};
 
 pub struct Database {
     connection: Connection,
@@ -75,14 +80,14 @@ impl Database {
         Ok(())
     }
 
-    pub fn get_all_aliases(&self) -> WHResult<Vec<(String, String)>> {
+    pub fn get_all_aliases(&self) -> WHResult<AliasList> {
         let mut statement = self.run_querry("select alias, path from aliases");
-        let mut aliases = Vec::new();
+        let mut aliases = AliasList::new();
         while let Ok(State::Row) = statement.next() {
-            aliases.push((
+            aliases.add((
                 statement.read::<String, _>("alias").unwrap(),
                 statement.read::<String, _>("path").unwrap(),
-            ));
+            ).into());
         }
         Ok(aliases)
     }

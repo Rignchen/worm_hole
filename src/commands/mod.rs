@@ -1,7 +1,7 @@
 mod add;
 mod edit;
 mod init;
-mod list;
+pub mod list;
 mod query;
 mod remove;
 mod rename;
