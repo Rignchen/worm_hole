@@ -1,4 +1,4 @@
-use crate::{db::Database, error::WHResult, path::Path};
+use crate::{db::Database, error::WHResult, path::DirPath};
 use clap::Parser;
 
 #[derive(Parser, Debug)]
@@ -7,7 +7,7 @@ pub struct EditAlias {
     pub alias: String,
     /// The new path to the location
     #[clap(default_value = ".")]
-    pub path: Path,
+    pub path: DirPath,
 }
 
 impl EditAlias {
