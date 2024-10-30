@@ -1,2 +1,6 @@
 /target
 /.db_test.db
+
+# vim
+*.sw[pom]
+*.orig
