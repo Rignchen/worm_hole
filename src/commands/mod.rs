@@ -6,10 +6,10 @@ mod query;
 mod remove;
 mod rename;
 
-pub type Init = init::Init;
-pub type AddAlias = add::AddAlias;
-pub type RemoveAlias = remove::RemoveAlias;
-pub type ListAliases = list::ListAliases;
-pub type Query = query::Query;
-pub type EditAlias = edit::EditAlias;
-pub type RenameAlias = rename::RenameAlias;
+pub use init::Init;
+pub use add::AddAlias;
+pub use remove::RemoveAlias;
+pub use list::ListAliases;
+pub use query::Query;
+pub use edit::EditAlias;
+pub use rename::RenameAlias;
