@@ -51,7 +51,7 @@ enum Shell {
 impl Shell {
     pub fn get_init_code(&self, aliases: &Init, db_path: &str) -> String {
         let mut builder = StringBuilder::default();
-        builder.append(format!("alias {}=worm_hole --db-path {}\n", aliases.worm_hole, FilePath::from_str(db_path).unwrap().str()));
+        builder.append(format!("alias {}='worm_hole --db-path {}'\n", aliases.worm_hole, FilePath::from_str(db_path).unwrap().str()));
         builder.append(self.get_cd_function(aliases.worm_hole.as_str()));
         builder.append(format!("alias {}=__worm_hole_cd\n", aliases.cd));
         if let Some(add) = &aliases.add {
