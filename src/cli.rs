@@ -26,6 +26,9 @@ structstruck::strike! {
             /// Edit the location of an alias
             #[clap(name = "edit")]
             EditAlias(commands::EditAlias),
+            /// Change the name of an alias
+            #[clap(name = "rename")]
+            RenameAlias(commands::RenameAlias),
             /// Initialize the database and the bash config to make wormhole work
             Init(commands::Init),
         },

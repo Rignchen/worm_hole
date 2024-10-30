@@ -29,6 +29,9 @@ pub struct Init {
     /// The command to use to edit a path in worm_hole
     #[clap(long)]
     edit: Option<String>,
+    /// The command to use to rename an alias in worm_hole
+    #[clap(long)]
+    rename: Option<String>,
 }
 impl Init {
     pub fn run(&self, database: &Database, db_path: &str) -> WHResult<()> {
@@ -64,6 +67,9 @@ impl Shell {
         }
         if let Some(edit) = &aliases.edit {
             builder.append(format!("alias {}='{} edit'\n", edit, aliases.worm_hole));
+        }
+        if let Some(rename) = &aliases.rename {
+            builder.append(format!("alias {}='{} rename'\n", rename, aliases.worm_hole));
         }
         builder.string().unwrap()
     }

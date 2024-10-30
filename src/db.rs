@@ -55,6 +55,21 @@ impl Database {
         Ok(())
     }
 
+    pub fn rename_alias(&self, old_alias: &str, new_alias: &str) -> WHResult<()> {
+        self.get_alias(old_alias)?; // Check if alias exists
+        let mut statement = self
+            .connection
+            .prepare("update aliases set alias = :new_alias where alias = :old_alias")
+            .unwrap();
+        statement
+            .bind::<&[(&str, &str)]>(&[(":old_alias", old_alias), (":new_alias", new_alias)])
+            .unwrap();
+        match statement.next() {
+            Ok(_) => Ok(()),
+            Err(_) => Err(WHError::AliasAlreadyExists(new_alias.to_string())),
+        }
+    }
+
     pub fn remove_alias(&self, alias: &str) -> WHResult<()> {
         let mut statement = self
             .connection

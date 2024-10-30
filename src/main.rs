@@ -29,6 +29,9 @@ fn run() -> WHResult<()> {
         Command::EditAlias(edit) => {
             edit.run(&database)?;
         }
+        Command::RenameAlias(rename) => {
+            rename.run(&database)?;
+        }
         Command::Init(init) => {
             init.run(&database, args.db_path.as_str())?;
         }
