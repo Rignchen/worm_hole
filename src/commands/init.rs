@@ -84,7 +84,7 @@ impl Shell {
                 builder.append("    then\n");
                 builder.append("        cd $HOME\n");
                 builder.append("    else\n");
-                builder.append(format!("        CD=$({} query $1) && \\builtin cd $CD\n", worm_hole_command));
+                builder.append(format!("        CD=$({} query \"$1\") && \\builtin cd \"$CD\"\n", worm_hole_command));
                 builder.append("    fi\n");
                 builder.append("}\n");
                 builder.string().unwrap()
@@ -94,9 +94,9 @@ impl Shell {
                 builder.append("    if test -z $argv\n");
                 builder.append("        cd $HOME\n");
                 builder.append("    else\n");
-                builder.append(format!("        set -l CD ({} query $argv)\n", worm_hole_command));
+                builder.append(format!("        set -l CD ({} query \"$argv\")\n", worm_hole_command));
                 builder.append("        if test -n $CD\n");
-                builder.append("            builtin cd $CD\n");
+                builder.append("            builtin cd \"$CD\"\n");
                 builder.append("        end\n");
                 builder.append("    end\n");
                 builder.append("end\n");
