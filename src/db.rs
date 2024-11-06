@@ -81,7 +81,7 @@ impl Database {
     }
 
     pub fn get_all_aliases(&self) -> WHResult<AliasList> {
-        let mut statement = self.run_querry("select alias, path from aliases");
+        let mut statement = self.run_querry("select alias, path from aliases order by alias");
         let mut aliases = AliasList::new();
         while let Ok(State::Row) = statement.next() {
             aliases.add((
