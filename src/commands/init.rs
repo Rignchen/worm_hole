@@ -24,6 +24,9 @@ pub struct Init {
     /// The command to use to list all the paths in worm_hole
     #[clap(long)]
     list: Option<String>,
+    /// The command to use to search for all paths containing a given pattern in worm_hole
+    #[clap(long)]
+	search: Option<String>,
     /// The command to use to query a path in worm_hole
     #[clap(long)]
     query: Option<String>,
@@ -63,6 +66,9 @@ impl Shell {
         if let Some(list) = &aliases.list {
             builder.append(format!("alias {}='{} list'\n", list, aliases.worm_hole));
         }
+		if let Some(search) = &aliases.search {
+			builder.append(format!("alias {}='{} search'\n", search, aliases.worm_hole));
+		}
         if let Some(query) = &aliases.query {
             builder.append(format!("alias {}='{} query'\n", query, aliases.worm_hole));
         }
