@@ -6,6 +6,7 @@ structstruck::strike! {
         AliasNotFound(String),
         AliasAlreadyExists(String),
         PathOfAliasNotExist(String, String),
+		PatternNotMatch(String),
     }
 }
 
@@ -24,6 +25,7 @@ pub fn unwrap_worm_hole_error<T>(result: WHResult<T>) -> T {
                     WHError::AliasAlreadyExists(alias) => format!("Cannot create alias {} because it already exists", alias),
                     WHError::PathOfAliasNotExist(alias, path) =>
                         format!("The path {} does no longer exist\nRun `wormhole rm {}` to remove the alias or `wormhole edit {} <new_path>` to update the path", path, alias, alias),
+					WHError::PatternNotMatch(pattern) => format!("The pattern {} does not match anything", pattern),
                 }
             );
             std::process::exit(1);

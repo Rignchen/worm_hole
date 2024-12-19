@@ -23,6 +23,9 @@ fn run() -> WHResult<()> {
         Command::ListAliases(list) => {
             list.run(&database)?;
         }
+		Command::SearchAliases(search) => {
+			search.run(&database)?;
+		}
         Command::Query(query) => {
             query.run(&database)?;
         }

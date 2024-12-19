@@ -100,4 +100,20 @@ impl Database {
             Err(WHError::AliasNotFound(alias.to_string()))
         }
     }
+
+	pub fn get_aliases_matching(&self, pattern: &str) -> WHResult<AliasList> {
+		let mut statement = self.run_statement::<(&str, &str)>("select alias, path from aliases where path like :pattern order by alias", (":pattern", pattern));
+		let mut aliases = AliasList::new();
+		if let Ok(State::Done) = statement.next() {
+			return Err(WHError::PatternNotMatch(pattern.to_string()));
+		}
+		let _ = statement.reset();
+		while let Ok(State::Row) = statement.next() {
+			aliases.add((
+				statement.read::<String, _>("alias").unwrap(),
+				statement.read::<String, _>("path").unwrap(),
+			).into());
+		}
+		Ok(aliases)
+	}
 }

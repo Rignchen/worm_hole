@@ -23,6 +23,9 @@ structstruck::strike! {
             /// List all location aliases
             #[clap(name = "ls")]
             ListAliases(commands::ListAliases),
+			/// Search for the aliases which have a path maching a pattern
+			#[clap(name = "search")]
+			SearchAliases(commands::SearchAliases),
             /// Edit the location of an alias
             #[clap(name = "edit")]
             EditAlias(commands::EditAlias),
