@@ -1,22 +1,22 @@
 structstruck::strike! {
-    /// List of errors that the program can return.
-    #[strikethrough[derive(Debug)]]
-    pub enum WHError {
-        DatabaseConnectionError(String),
-        AliasNotFound(String),
-        AliasAlreadyExists(String),
-        PathOfAliasNotExist(String, String),
+	/// List of errors that the program can return.
+	#[strikethrough[derive(Debug)]]
+	pub enum WHError {
+		DatabaseConnectionError(String),
+		AliasNotFound(String),
+		AliasAlreadyExists(String),
+		PathOfAliasNotExist(String, String),
 		PatternNotMatch(String),
-    }
+	}
 }
 
 /// Result type which wither take a type T or a WHError.
 pub type WHResult<T> = std::result::Result<T, WHError>;
 pub fn unwrap_worm_hole_error<T>(result: WHResult<T>) -> T {
-    match result {
-        Ok(value) => value,
-        Err(error) => {
-            eprintln!(
+	match result {
+		Ok(value) => value,
+		Err(error) => {
+			eprintln!(
                 "{}",
                 match error {
                     WHError::DatabaseConnectionError(path) =>
@@ -28,7 +28,7 @@ pub fn unwrap_worm_hole_error<T>(result: WHResult<T>) -> T {
 					WHError::PatternNotMatch(pattern) => format!("The pattern {} does not match anything", pattern),
                 }
             );
-            std::process::exit(1);
-        }
-    }
+			std::process::exit(1);
+		}
+	}
 }

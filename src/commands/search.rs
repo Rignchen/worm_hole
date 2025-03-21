@@ -8,15 +8,13 @@ pub struct SearchAliases {
 }
 
 impl SearchAliases {
-    pub fn run(&self, database: &Database) -> WHResult<()> {
+	pub fn run(&self, database: &Database) -> WHResult<()> {
 		let alias_list = database.get_aliases_matching(format!("%{}%", self.pattern).as_str());
 		if alias_list.is_ok() {
 			alias_list.unwrap().print();
 			Ok(())
-		}
-		else {
+		} else {
 			Err(alias_list.err().unwrap())
 		}
-    }
+	}
 }
-
